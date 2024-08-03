@@ -61,10 +61,7 @@ const Login = function () {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Se connecter</button>
       </form>
-      <p>
-        Pas encore de compte ?
-        <Link to="/register">S&apos;inscrire</Link>
-      </p>
+      
     </div>
   );
 };
