@@ -1,20 +1,31 @@
 .login-container {
-  max-width: 400px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // Utilise la hauteur de la vue pour centrer verticalement
+  margin: 0;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-
-  h1 {
-    margin-bottom: 20px;
-    color: #333333;
-    font-size: 26px;
-    font-weight: bold;
-  }
+  background-color: #f4f4f4; // Une couleur de fond pour mieux visualiser le conteneur
 
   .form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333333;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
     .input-group {
       margin-bottom: 20px;
       text-align: left;
