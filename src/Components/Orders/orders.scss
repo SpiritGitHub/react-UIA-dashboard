@@ -1,0 +1,26 @@
+.orders {
+  display: grid;
+  grid-template-columns: 17% 83%;
+  justify-content: center;
+
+  .orders_main {
+    h3 {
+      color: rgb(88, 88, 88);
+      padding: 10px 10px;
+      margin: 10px auto;
+      font-size: 15px;
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .orders {
+    display: grid;
+    grid-template-columns: 100%;
+    justify-content: center;
+
+    .home_sidebar {
+      display: none;
+    }
+  }
+}
