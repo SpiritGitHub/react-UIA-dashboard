@@ -74,7 +74,7 @@ function TableListIncidentTypes() {
 
   return (
     <div className="table_container">
-      <h2 className="table_title">All Incident Types</h2>
+      <h2 className="table_title">Les types d'Incidents</h2>
       <TableContainer component={Paper} className="MuiTableContainer-root">
         <Table className="MuiTable-root" aria-label="simple table">
           <TableHead className="MuiTableHead-root">

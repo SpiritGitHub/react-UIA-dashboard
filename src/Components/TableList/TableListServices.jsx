@@ -33,17 +33,18 @@ function TableListServices() {
 
   return (
     <div className="table_container">
-      <h2 className="table_title">All Services</h2>
+      <h2 className="table_title">Les Services</h2>
       <TableContainer component={Paper} className="MuiTableContainer-root">
         <Table className="MuiTable-root" aria-label="simple table">
           <TableHead className="MuiTableHead-root">
             <TableRow>
-              <TableCell className="MuiTableCell-root MuiTableCell-head">Service Name</TableCell>
-              <TableCell className="MuiTableCell-root MuiTableCell-head">Type</TableCell>
-              <TableCell className="MuiTableCell-root MuiTableCell-head">Address</TableCell>
-              <TableCell className="MuiTableCell-root MuiTableCell-head">Admin Name</TableCell>
-              <TableCell className="MuiTableCell-root MuiTableCell-head">Admin Email</TableCell>
-              <TableCell className="MuiTableCell-root MuiTableCell-head">Admin Phone</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Nom du Service</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Type de Service</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Addresse</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Contact Service</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Nom Administrateur</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Email Admin</TableCell>
+              <TableCell className="MuiTableCell-root MuiTableCell-head">Contact Administrateur</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -52,6 +53,7 @@ function TableListServices() {
                 <TableCell className="MuiTableCell-root MuiTableCell-body">{service.nomService}</TableCell>
                 <TableCell className="MuiTableCell-root MuiTableCell-body">{service.typeService}</TableCell>
                 <TableCell className="MuiTableCell-root MuiTableCell-body">{service.addresseService}</TableCell>
+                <TableCell className="MuiTableCell-root MuiTableCell-body">{service.telephoneService}</TableCell>
                 <TableCell className="MuiTableCell-root MuiTableCell-body">{service.nomCompletAdmin}</TableCell>
                 <TableCell className="MuiTableCell-root MuiTableCell-body">{service.emailAdmin}</TableCell>
                 <TableCell className="MuiTableCell-root MuiTableCell-body">{service.telAdmin}</TableCell>

@@ -57,7 +57,7 @@ if (error) {
 }
   return (
     <div className="table_container">
-      <h2 className="table_title">All Urgentistes</h2>
+      <h2 className="table_title">Urgentistes</h2>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
