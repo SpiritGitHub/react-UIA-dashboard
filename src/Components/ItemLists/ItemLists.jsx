@@ -1,24 +1,20 @@
-import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import LocalGroceryStoreOutlinedIcon from '@mui/icons-material/LocalGroceryStoreOutlined';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined'; // Pour services
+import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined'; // Pour signalement
+import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined'; // Pour urgentistes
+import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined'; // Pour incidents
 import './itemlists.scss';
 
-function ItemLists({ type }) {
-    let data;
+function ItemLists({ title, count }) {
+    let data = {};
 
-    // Dynamicaly change the ui content
-    switch (type) {
-        case 'services':
+    switch (title) {
+        case 'SERVICES':
             data = {
-                title: 'SERVICES',
-                isMoney: false,
-                count: 232,
                 icon: (
-                    <PermIdentityIcon
+                    <BuildOutlinedIcon
                         style={{
                             color: '#FF74B1',
                             backgroundColor: '#FFD6EC',
@@ -30,14 +26,10 @@ function ItemLists({ type }) {
                 linkto: '/services',
             };
             break;
-        case 'signalement':
+        case 'SIGNALEMENT':
             data = {
-                title: 'SIGNALEMENT',
-                isMoney: false,
-                count: 34,
-
                 icon: (
-                    <LocalGroceryStoreOutlinedIcon
+                    <ReportProblemOutlinedIcon
                         style={{
                             color: '#AC7088',
                             backgroundColor: '#FFF38C',
@@ -45,17 +37,14 @@ function ItemLists({ type }) {
                         className="icon"
                     />
                 ),
-                link: 'Voir  les signlement',
+                link: 'Voir les signalements',
                 linkto: '/signalements',
             };
             break;
-        case 'urgentistes':
+        case 'URGENTISTES':
             data = {
-                title: 'URGENTISTES',
-                isMoney: true,
-                count: 107,
                 icon: (
-                    <AttachMoneyOutlinedIcon
+                    <LocalHospitalOutlinedIcon
                         style={{
                             color: '#367E18',
                             backgroundColor: '#A7FFE4',
@@ -67,13 +56,10 @@ function ItemLists({ type }) {
                 linkto: '/urgentistes',
             };
             break;
-        case 'incident':
+        case 'INCIDENTS':
             data = {
-                title: 'INCIDENTS',
-                count: 444,
-                isMoney: true,
                 icon: (
-                    <PaidOutlinedIcon
+                    <EventAvailableOutlinedIcon
                         style={{
                             color: '#AC7088',
                             backgroundColor: '#B1B2FF',
@@ -81,7 +67,7 @@ function ItemLists({ type }) {
                         className="icon"
                     />
                 ),
-                link: 'Voir les Incidents',
+                link: 'Voir les incidents',
                 linkto: '/incidents',
             };
             break;
@@ -92,18 +78,11 @@ function ItemLists({ type }) {
     return (
         <div className="item_listss">
             <div className="name">
-                <p>{data.title}</p>
-                <span className="persentage positive">
-                    <KeyboardArrowUpIcon />
-                    20 %
-                </span>
+                <p>{title}</p>
             </div>
-
             <div className="counts">
-                {data.isMoney && <AttachMoneyOutlinedIcon />}
-                {data.count}
+                {count}
             </div>
-
             <div className="see_item">
                 <Link to={data.linkto}>
                     <p>{data.link}</p>
@@ -113,5 +92,10 @@ function ItemLists({ type }) {
         </div>
     );
 }
+
+ItemLists.propTypes = {
+    title: PropTypes.string.isRequired,
+    count: PropTypes.number.isRequired,
+};
 
 export default ItemLists;

@@ -1,0 +1,31 @@
+.event-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+
+  th,
+  td {
+    border: 1px solid #2e2c2c;
+    padding: 8px;
+  }
+
+  th {
+    background-color: #493030;
+    text-align: left;
+  }
+
+  tr:nth-child(even) {
+    background-color: #221f1f;
+  }
+
+  tr:hover {
+    background-color: #700808;
+  }
+
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #4caf50;
+    color: white;
+  }
+}

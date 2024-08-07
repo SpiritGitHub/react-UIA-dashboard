@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
 import './Login.scss';
 
@@ -20,8 +20,9 @@ const Login = function () {
       localStorage.setItem('token', jwt);
       localStorage.setItem('role', role);
       localStorage.setItem('userId', userId);
-      localStorage.setItem('email', email); // Stockage de l'email
-      localStorage.setItem('serviceId', serviceId); // Stockage du serviceId
+      localStorage.setItem('email', email);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
+      localStorage.setItem('serviceId', serviceId); 
       navigate('/home');
       setErrorMessage(''); // Effacer le message d'erreur en cas de succès
     } catch (error) {

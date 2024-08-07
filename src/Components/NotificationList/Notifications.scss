@@ -1,0 +1,26 @@
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+
+    .notification-content {
+        margin-left: 10px;
+        flex-grow: 1;
+    }
+
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-left: 10px;
+    }
+
+    &.unread .status-dot {
+        background-color: blue;
+    }
+
+    &.read .status-dot {
+        background-color: grey;
+    }
+}

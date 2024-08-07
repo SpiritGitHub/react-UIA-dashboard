@@ -1,7 +1,4 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ColorContext } from '../../ColorContext/darkContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
@@ -10,14 +7,24 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import TableChartIcon from '@mui/icons-material/TableChart';
+import React, { useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ColorContext } from '../../ColorContext/darkContext';
 import './Sidebar.scss';
 
 function Sidebar() {
     const { darkMode, role } = useContext(ColorContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log("Role:", role);
     }, [role]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('serviceId'); // Suppression de tout autre stockage local pertinent
+        navigate('/');
+    };
 
     const renderLinks = () => {
         let mainLinks = [];
@@ -25,7 +32,6 @@ function Sidebar() {
         let settingsLinks = [
             { path: "/profile", label: "Profile", icon: <AccountCircleIcon className="icon" /> },
             { path: "/settings", label: "Réglages", icon: <SettingsRoundedIcon className="icon" /> },
-            { path: "/logout", label: "Deconnexion", icon: <LogoutIcon className="icon" /> },
         ];
 
         if (role === 'ADMIN') {
@@ -91,6 +97,12 @@ function Sidebar() {
                             </Link>
                         </li>
                     ))}
+                    <li>
+                        <div onClick={handleLogout} className="logout_button" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                            <LogoutIcon className="icon" />
+                            <span className="link-label">Déconnexion</span>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

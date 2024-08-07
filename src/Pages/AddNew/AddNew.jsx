@@ -1,56 +1,43 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/jsx-props-no-spreading */
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import axiosInstance from '../../axiosConfig';
 import Input from '../../Components/Input/Input';
 import Navbar from '../../Components/Navbar/Navbar';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import noImage from '../../Images/photo-camera.png';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './New.scss';
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';  // Import de l'icône
 
 function AddNew({ inputs, titlee, type }) {
-    let dynamicInpVal;
+    const initialState = {
+        SERVICE: {
+            nomService: '',
+            typeService: '',
+            addresseService: '',
+            telephoneService: '',
+            nomCompletAdmin: '',
+            emailAdmin: '',
+            telAdmin: '',
+        },
+        INCIDENT: {
+            nomIncident: '',
+            description: '',
+            typeServices: [],
+            photo: '',
+        },
+        URGENTISTE: {
+            nomComplet: '',
+            email: '',
+            tel: '',
+            serviceId: localStorage.getItem('serviceId') || '',
+        }
+    };
 
-    // Dynamically change the state values based on type
-    switch (type) {
-        case 'SERVICE':
-            dynamicInpVal = {
-                nomService: '',
-                typeService: '',
-                addresseService: '',
-                nomCompletAdmin: '',
-                emailAdmin: '',
-                telAdmin: '',
-                passwordAdmin: '',
-            };
-            break;
-        case 'INCIDENT':
-            dynamicInpVal = {
-                nomIncident: '',
-                description: '',
-                typeServices: [],
-                photo: '',
-            };
-            break;
-        case 'URGENTISTE':
-            dynamicInpVal = {
-                nomComplet: '',
-                email: '',
-                tel: '',
-                password: '',
-                serviceId: localStorage.getItem('serviceId') || '', // récupérer le serviceId depuis le localStorage
-            };
-            break;
-        default:
-            break;
-    }
-
-    const [userInp, setUserInp] = useState(dynamicInpVal);
-    const [file, setFile] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-
+    const [userInp, setUserInp] = useState(initialState[type]);
+    const [file, setFile] = useState(null);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -70,50 +57,53 @@ function AddNew({ inputs, titlee, type }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validation: Check if typeService is empty
+        if (type === 'SERVICE' && !userInp.typeService) {
+            toast.error("Veuillez sélectionner un type de service.");
+            return;
+        }
+
         try {
             const token = localStorage.getItem('token');
+            let apiUrl;
+            let payload;
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': type === 'INCIDENT' ? 'multipart/form-data' : 'application/json',
                 },
             };
 
-            let apiUrl;
-            const formData = new FormData();
-
             if (type === 'SERVICE') {
                 apiUrl = '/api/admin/createServiceWithAdmin';
-                Object.keys(userInp).forEach(key => {
-                    formData.append(key, userInp[key]);
-                });
+                payload = JSON.stringify(userInp);
+                console.log('Payload:', payload); // Log the payload
             } else if (type === 'URGENTISTE') {
                 apiUrl = '/api/serviceAdmin/createUrgentiste';
-                Object.keys(userInp).forEach(key => {
-                    formData.append(key, userInp[key]);
-                });
+                payload = JSON.stringify(userInp);
             } else if (type === 'INCIDENT') {
                 apiUrl = '/api/admin/add-incident';
-                formData.append('nomIncident', userInp.nomIncident);
-                formData.append('description', userInp.description);
-                formData.append('typeServices', userInp.typeServices.join(','));
+                payload = new FormData();
+                payload.append('nomIncident', userInp.nomIncident);
+                payload.append('description', userInp.description);
+                payload.append('typeServices', userInp.typeServices.join(','));
                 if (file) {
-                    formData.append('photo', file);
+                    payload.append('photo', file);
                 }
             }
 
-            const response = await axiosInstance.post(apiUrl, formData, config);
-            console.log(response.data);
-            setSuccessMessage(`${type.charAt(0) + type.slice(1).toLowerCase()} créé avec succès !`);
+            await axiosInstance.post(apiUrl, payload, config);
+            toast.success(`${type.charAt(0) + type.slice(1).toLowerCase()} créé avec succès !`);
             setTimeout(() => {
                 navigate('/home');
-            }, 2000); // Redirige après 2 secondes
+            }, 2000);
         } catch (error) {
+            toast.error(`Il y a eu une erreur lors de la création du ${type.toLowerCase()} !`);
             console.error(`There was an error creating the ${type.toLowerCase()}!`, error);
         }
     };
 
-    // Filter inputs based on the type
     const getRelevantInputs = () => {
         if (type === 'SERVICE') {
             return inputs.filter(input => input.section === 'service' || input.section === 'admin');
@@ -145,11 +135,9 @@ function AddNew({ inputs, titlee, type }) {
 
                         {type !== 'SERVICE' && type !== 'URGENTISTE' && (
                             <div className="image">
-                                <img src={file ? URL.createObjectURL(file) : noImage} alt="" />
+                                <img src={file ? URL.createObjectURL(file) : noImage} alt="Incident" />
                             </div>
                         )}
-
-                        {successMessage && <p className="success_message">{successMessage}</p>}
 
                         <form onSubmit={handleSubmit} className="form">
                             {type !== 'SERVICE' && type !== 'URGENTISTE' && (
@@ -192,6 +180,16 @@ function AddNew({ inputs, titlee, type }) {
                                                 <option value="POLICIER">Policier</option>
                                                 <option value="AMBULANCIER">Ambulancier</option>
                                             </select>
+                                        </div>
+                                        <div className="form_inp">
+                                            <label htmlFor="telephoneService">Téléphone du Service:</label>
+                                            <input
+                                                id="telephoneService"
+                                                name="telephoneService"
+                                                type="text"
+                                                value={userInp.telephoneService}
+                                                onChange={handleChange}
+                                            />
                                         </div>
                                     </div>
                                     <div className="section">
@@ -275,8 +273,15 @@ function AddNew({ inputs, titlee, type }) {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }
+
+AddNew.propTypes = {
+    inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
+    titlee: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['SERVICE', 'INCIDENT', 'URGENTISTE']).isRequired,
+};
 
 export default AddNew;

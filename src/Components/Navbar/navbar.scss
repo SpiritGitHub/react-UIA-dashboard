@@ -52,9 +52,10 @@ $text_color: #3d3c42;
     .item_lists {
       display: flex;
       align-items: center;
+      margin-left: 70%;
 
       .item {
-        margin-left: 15px;
+        margin-left: 20px;
         display: flex;
         align-items: center;
         position: relative;
@@ -90,6 +91,9 @@ $text_color: #3d3c42;
           border-radius: 50%;
           object-fit: cover;
           cursor: pointer;
+        }
+        .admin_email {
+          margin-left: 10px;
         }
       }
     }
@@ -190,6 +194,78 @@ $text_color: #3d3c42;
     }
   }
 }
+
+.notification_icon {
+  position: relative;
+  display: inline-block;
+
+  .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 5px;
+      font-size: 12px;
+  }
+}
+.notification_panel {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  width: 300px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+
+  h3 {
+      margin: 0 0 10px;
+  }
+
+  .notification-item {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+          border-bottom: none;
+      }
+
+      &.unread {
+          font-weight: bold;
+      }
+
+      button {
+          background: none;
+          border: none;
+          color: blue;
+          cursor: pointer;
+          padding: 0;
+          margin-top: 5px;
+      }
+  }
+
+  button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      text-align: center;
+
+      &:hover {
+          background: #0056b3;
+      }
+  }
+}
+
 
 @media screen and (max-width: 992px) {
   .navbar {

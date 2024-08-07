@@ -1,38 +1,143 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ColorContext } from '../../ColorContext/darkContext';
+import axiosInstance from '../../axiosConfig';
+import Notification from '../NotificationList/Notification';
+
+// Importations des icônes depuis @mui/icons-material
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import LanguageIcon from '@mui/icons-material/Language';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonIcon from '@mui/icons-material/Person';
-import SearchIcon from '@mui/icons-material/Search';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import TableChartIcon from '@mui/icons-material/TableChart';
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ColorContext } from '../../ColorContext/darkContext';
 
-// import sass file
-import './navbar.scss';
-
-// import images
+// Importation de l'image
 import admin from '../../Images/admin_pic.jpg';
 
+// Importation du fichier SCSS
+import './navbar.scss';
+
 function Navbar() {
-    const [toggle, setToggle] = useState(false);
-    // color state management using react context
     const { darkMode, dispatch } = useContext(ColorContext);
+    const navigate = useNavigate();
+    const [toggle, setToggle] = useState(false);
+    const [role, setRole] = useState('');
+    const [email, setEmail] = useState('');
+    const [serviceId, setServiceId] = useState('');
+    const [unreadCount, setUnreadCount] = useState(0);
+    const [notifications, setNotifications] = useState([]);
+    const [showNotifications, setShowNotifications] = useState(false);
+
+    useEffect(() => {
+        const storedRole = localStorage.getItem('role');
+        const storedEmail = localStorage.getItem('email');
+        const storedServiceId = localStorage.getItem('serviceId');
+        setRole(storedRole);
+        setEmail(storedEmail);
+        setServiceId(storedServiceId);
+
+        const fetchNotifications = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                let endpoint = '';
+                if (storedRole === 'ADMIN') {
+                    endpoint = '/api/admin-notifications';
+                } else if (storedRole === 'SERVICE_ADMIN') {
+                    endpoint = `/api/notificationservice/${storedServiceId}`;
+                }
+                const response = await axiosInstance.get(endpoint, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setNotifications(response.data);
+                setUnreadCount(response.data.filter(n => !n.read).length);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des notifications:', error);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
 
     const handleToggle = () => {
         setToggle(!toggle);
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('serviceId');
+        localStorage.removeItem('role');
+        localStorage.removeItem('email');
+        navigate('/');
+    };
+
+    const handleNotificationClick = () => {
+        setShowNotifications(!showNotifications);
+    };
+
+    const handleMarkAsRead = async (notificationId) => {
+        try {
+            const token = localStorage.getItem('token');
+            let endpoint = '';
+            if (role === 'ADMIN') {
+                endpoint = `/api/admin-notifications/${notificationId}/read`;
+            } else if (role === 'SERVICE_ADMIN') {
+                endpoint = `/api/notificationservice/${notificationId}/read`;
+            }
+            await axiosInstance.put(endpoint, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setNotifications(notifications.map(n => (n.id === notificationId ? { ...n, read: true } : n)));
+            setUnreadCount(unreadCount - 1);
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour de l\'état de lecture de la notification:', error);
+        }
+    };
+
+    const renderLinks = () => {
+        let mainLinks = [];
+        let listLinks = [];
+        let settingsLinks = [
+            { path: "/profile", label: "Profile", icon: <AccountCircleIcon className="icon" /> },
+            { path: "/settings", label: "Réglages", icon: <SettingsRoundedIcon className="icon" /> },
+        ];
+
+        if (role === 'ADMIN') {
+            mainLinks = [
+                { path: "/home", label: "Dashboard", icon: <DashboardIcon className="icon" /> },
+            ];
+            listLinks = [
+                { path: "/services", label: "Services", icon: <PersonIcon className="icon" /> },
+                { path: "/incidents", label: "Incidents", icon: <TableChartIcon className="icon" /> },
+                { path: "/signalements", label: "Signalement", icon: <CreditCardIcon className="icon" /> },
+                { path: "/urgentistes", label: "Urgentistes", icon: <CreditCardIcon className="icon" /> },
+                { path: "/admin-notifications", label: "Notifications", icon: <NotificationsNoneIcon className="icon" /> },
+            ];
+        } else if (role === 'SERVICE_ADMIN') {
+            mainLinks = [
+                { path: "/home", label: "Dashboard", icon: <DashboardIcon className="icon" /> },
+            ];
+            listLinks = [
+                { path: "/urgentistes", label: "Urgentistes", icon: <CreditCardIcon className="icon" /> },
+                { path: "/signalements", label: "Signalement", icon: <CreditCardIcon className="icon" /> },
+                { path: `/notificationservice/${serviceId}`, label: "Notifications", icon: <NotificationsNoneIcon className="icon" /> },
+            ];
+        }
+
+        return { mainLinks, listLinks, settingsLinks };
+    };
+
+    const { mainLinks, listLinks, settingsLinks } = renderLinks();
 
     return (
         <div className="navbar">
@@ -43,22 +148,12 @@ function Navbar() {
                     ) : (
                         <MenuIcon className="menu_icon" onClick={handleToggle} />
                     )}
-
                     <Link to="/" style={{ textDecoration: 'none' }}>
                         <h3 className="text_none">Dashboard</h3>
                     </Link>
                 </div>
-                <div className="search">
-                    <input type="text" placeholder="Search.." />
-
-                    <SearchIcon className="search_icon" />
-                </div>
 
                 <div className="item_lists">
-                    <div className="item item_lan">
-                        <LanguageIcon className="item_icon" />
-                        <p>English</p>
-                    </div>
                     <div className="item">
                         {!darkMode ? (
                             <DarkModeIcon
@@ -73,20 +168,14 @@ function Navbar() {
                         )}
                     </div>
                     <div className="item">
-                        <FullscreenExitIcon className="item_icon" />
+                        <div className="notification_icon" onClick={handleNotificationClick}>
+                            <NotificationsNoneIcon className="item_icon" />
+                            {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+                        </div>
                     </div>
-
-                    <div className="item">
-                        <ChatBubbleOutlineIcon className="item_icon" />
-                        <span className="badge">2</span>
-                    </div>
-                    <div className="item">
-                        <NotificationsNoneIcon className="item_icon" />
-                        <span className="badge">1</span>
-                    </div>
-
                     <div className="item">
                         <img className="admin_pic" src={admin} alt="admin" />
+                        <p className="admin_email">{email}</p>
                     </div>
                 </div>
             </div>
@@ -94,58 +183,52 @@ function Navbar() {
             <div className="res_navbar">
                 {toggle && (
                     <div className="res_nav_menu">
-                        <div className="res_nav_menuu">
-                            <div className="links">
-                                <ul>
-                                    <p className="spann">Main</p>
-                                    <Link to="/home" style={{ textDecoration: 'none' }}>
-                                        <li>
-                                            <DashboardIcon className="icon" /> Dashboard
-                                        </li>
+                        <ul>
+                            <p className="spann">Main</p>
+                            {mainLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link to={link.path} style={{ textDecoration: 'none' }}>
+                                        {link.icon}
+                                        <span className="link-label">{link.label}</span>
                                     </Link>
-
-                                    <p className="spann">lists</p>
-                                    <Link to="/services" style={{ textDecoration: 'none' }}>
-                                        <li>
-                                            <PersonIcon className="icon" /> Services
-                                        </li>
+                                </li>
+                            ))}
+                            <p className="spann">Lists</p>
+                            {listLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link to={link.path} style={{ textDecoration: 'none' }}>
+                                        {link.icon}
+                                        <span className="link-label">{link.label}</span>
                                     </Link>
-                                    <Link to="/incidents" style={{ textDecoration: 'none' }}>
-                                        <li>
-                                            <CreditCardIcon className="icon" /> Incidents
-                                        </li>
+                                </li>
+                            ))}
+                            <p className="spann">Settings</p>
+                            {settingsLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link to={link.path} style={{ textDecoration: 'none' }}>
+                                        {link.icon}
+                                        <span className="link-label">{link.label}</span>
                                     </Link>
-                                    <Link to="/urgentistes" style={{ textDecoration: 'none' }}>
-                                        <li>
-                                            <TableChartIcon className="icon" /> Urgentistes
-                                        </li>
-                                    </Link>
-                                    <Link to="/signalements" style={{ textDecoration: 'none' }}>
-                                        <li>
-                                            <CreditCardIcon className="icon" /> Signalement
-                                        </li>
-                                    </Link>
-                                   
-                                    <li>
-                                        <BarChartIcon className="icon" /> Status
-                                    </li>
-
-                                    <p className="spann">Seetings</p>
-                                    <li>
-                                        <AccountCircleIcon className="icon" /> Profile
-                                    </li>
-                                    <li>
-                                        <SettingsRoundedIcon className="icon" /> Réglages
-                                    </li>
-                                    <li>
-                                        <LogoutIcon className="icon" /> Deconnexion
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                                </li>
+                            ))}
+                            <li>
+                                <div onClick={handleLogout} className="logout_button" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                                    <LogoutIcon className="icon" />
+                                    <span className="link-label">Déconnexion</span>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 )}
             </div>
+
+            {showNotifications && (
+                <Notification
+                    notifications={notifications}
+                    handleMarkAsRead={handleMarkAsRead}
+                    role={role}
+                />
+            )}
         </div>
     );
 }

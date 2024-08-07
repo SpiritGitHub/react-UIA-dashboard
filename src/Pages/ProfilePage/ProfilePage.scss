@@ -1,0 +1,43 @@
+.profile_page {
+    display: flex;
+    height: 100vh;
+
+    .home_sidebar {
+        width: 250px;
+    }
+
+    .profile_main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile_content {
+        flex: 1;
+        padding: 20px;
+        background-color: #f7f7f7;
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .profile_form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .submit_btn {
+                padding: 10px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: 4px;
+
+                &:hover {
+                    background-color: #45a049;
+                }
+            }
+        }
+    }
+}
