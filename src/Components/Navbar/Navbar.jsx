@@ -121,7 +121,8 @@ function Navbar() {
                 { path: "/incidents", label: "Incidents", icon: <TableChartIcon className="icon" /> },
                 { path: "/signalements", label: "Signalement", icon: <CreditCardIcon className="icon" /> },
                 { path: "/urgentistes", label: "Urgentistes", icon: <CreditCardIcon className="icon" /> },
-                { path: "/admin-notifications", label: "Notifications", icon: <NotificationsNoneIcon className="icon" /> },
+                { path: "/notifications", label: "Notification", icon: <NotificationsNoneIcon className="icon" /> },
+
             ];
         } else if (role === 'SERVICE_ADMIN') {
             mainLinks = [
@@ -130,7 +131,8 @@ function Navbar() {
             listLinks = [
                 { path: "/urgentistes", label: "Urgentistes", icon: <CreditCardIcon className="icon" /> },
                 { path: "/signalements", label: "Signalement", icon: <CreditCardIcon className="icon" /> },
-                { path: `/notificationservice/${serviceId}`, label: "Notifications", icon: <NotificationsNoneIcon className="icon" /> },
+                { path: "/notifications", label: "Notification", icon: <NotificationsNoneIcon className="icon" /> },
+
             ];
         }
 

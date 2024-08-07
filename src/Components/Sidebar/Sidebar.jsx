@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import TableChartIcon from '@mui/icons-material/TableChart';
@@ -43,7 +43,7 @@ function Sidebar() {
                 { path: "/incidents", label: "Incidents", icon: <TableChartIcon className="icon" /> },
                 { path: "/signalements", label: "Signalement", icon: <CreditCardIcon className="icon" /> },
                 { path: "/urgentistes", label: "Urgentistes", icon: <CreditCardIcon className="icon" /> },
-                { path: "/status", label: "Status", icon: <BarChartIcon className="icon" /> },
+                { path: "/notifications", label: "Notification", icon: <NotificationsNoneIcon className="icon" /> },
             ];
         } else if (role === 'SERVICE_ADMIN') {
             mainLinks = [
