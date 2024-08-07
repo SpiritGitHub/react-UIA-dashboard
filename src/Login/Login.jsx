@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import './Login.scss';
 
 const Login = function () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setErrorMessage] = useState(''); // Renommé errorMessage en error
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -16,23 +19,27 @@ const Login = function () {
         email,
         password,
       });
-      const { jwt, role, userId, serviceId } = response.data; // Assurez-vous que l'API renvoie ces champs
+      const { jwt, role, userId, serviceId } = response.data;
       localStorage.setItem('token', jwt);
       localStorage.setItem('role', role);
       localStorage.setItem('userId', userId);
       localStorage.setItem('email', email);
       localStorage.setItem('refreshToken', response.data.refreshToken);
-      localStorage.setItem('serviceId', serviceId); 
+      localStorage.setItem('serviceId', serviceId);
       navigate('/home');
-      setErrorMessage(''); // Effacer le message d'erreur en cas de succès
+      setErrorMessage('');
     } catch (error) {
       console.error('Login failed:', error);
       let errorMessage = 'Échec de la connexion. Veuillez vérifier vos Connexions.';
       if (error.response && error.response.status === 401) {
         errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
       }
-      setErrorMessage(errorMessage); // Mettre à jour le message d'erreur
+      setErrorMessage(errorMessage);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -49,20 +56,24 @@ const Login = function () {
             required
           />
         </div>
-        <div className="input-group">
+        <div className="input-group password-group">
           <label htmlFor="password">Mot de passe</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="password-input-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span className="password-toggle-icon" onClick={togglePasswordVisibility}>
+              {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </span>
+          </div>
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Se connecter</button>
       </form>
-      
     </div>
   );
 };

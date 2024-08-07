@@ -50,7 +50,7 @@ function Navbar() {
                 if (storedRole === 'ADMIN') {
                     endpoint = '/api/admin-notifications';
                 } else if (storedRole === 'SERVICE_ADMIN') {
-                    endpoint = `/api/notificationservice/${storedServiceId}`;
+                    endpoint = `/api/serviceAdmin/notificationservice/${storedServiceId}`;
                 }
                 const response = await axiosInstance.get(endpoint, {
                     headers: {
@@ -90,7 +90,7 @@ function Navbar() {
             if (role === 'ADMIN') {
                 endpoint = `/api/admin-notifications/${notificationId}/read`;
             } else if (role === 'SERVICE_ADMIN') {
-                endpoint = `/api/notificationservice/${notificationId}/read`;
+                endpoint = `/api/serviceAdmin/markAsRead/${notificationId}`;
             }
             await axiosInstance.put(endpoint, {}, {
                 headers: {

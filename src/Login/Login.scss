@@ -3,10 +3,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; // Utilise la hauteur de la vue pour centrer verticalement
+  height: 100vh;
   margin: 0;
   padding: 20px;
-  background-color: #f4f4f4; // Une couleur de fond pour mieux visualiser le conteneur
+  background-color: #f4f4f4;
+
+  h1 {
+    margin-bottom: 20px;
+    color: #333333;
+    font-size: 26px;
+    font-weight: bold;
+  }
 
   .form {
     display: flex;
@@ -18,13 +25,6 @@
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
-
-    h1 {
-      margin-bottom: 20px;
-      color: #333333;
-      font-size: 26px;
-      font-weight: bold;
-    }
 
     .input-group {
       margin-bottom: 20px;
@@ -50,6 +50,27 @@
         &:focus {
           outline: none;
           border-color: #007bff;
+        }
+      }
+    }
+
+    .password-group {
+      position: relative;
+
+      .password-input-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        input {
+          width: 100%;
+          padding-right: 40px; // Add padding to the right to avoid overlapping the icon
+        }
+
+        .password-toggle-icon {
+          position: absolute;
+          right: 10px;
+          cursor: pointer;
         }
       }
     }

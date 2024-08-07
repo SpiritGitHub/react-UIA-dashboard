@@ -13,6 +13,7 @@ function Lists({ type, role }) {
 
     switch (type) {
         case 'emergencydoctor':
+        case 'urgentiste':
             TableComponent = TableListUrgentistes;
             break;
         case 'service':
@@ -21,9 +22,6 @@ function Lists({ type, role }) {
         case 'incident':
             TableComponent = TableListIncidents;
             break;
-        case 'urgentiste':
-            TableComponent = TableListUrgentistes;
-            break;
         case 'signalement': 
             TableComponent = TableListSignalements;
             break;
@@ -31,8 +29,8 @@ function Lists({ type, role }) {
             TableComponent = null;
     }
 
-    // Vérification pour afficher le bouton Ajoutez Nouveau sauf pour le rôle 'admin' et pour les signalements
-    const shouldShowAddNewButton = role !== 'admin' && type !== 'urgentiste' && type !== 'signalement';
+    // Vérification pour afficher le bouton Ajoutez Nouveau sauf pour le rôle 'ADMIN' pour les urgentistes et pour les signalements
+    const shouldShowAddNewButton = type !== 'signalement' && !(type === 'urgentiste' && role === 'ADMIN');
 
     return (
         <div className="list_page">
@@ -47,7 +45,7 @@ function Lists({ type, role }) {
                     <div className="btnn">
                         {shouldShowAddNewButton && (
                             <Link
-                                to={`/${type === 'emergencydoctor' ? 'emergencydoctors' :
+                                to={`/${
                                     type === 'service' ? 'services' :
                                     type === 'incident' ? 'incidents' :
                                     type === 'urgentiste' ? 'urgentistes' :

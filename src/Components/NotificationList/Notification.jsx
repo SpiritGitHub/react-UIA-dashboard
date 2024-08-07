@@ -4,12 +4,13 @@ import './Notifications.scss';
 
 function Notification({ notifications, handleMarkAsRead, role }) {
     const navigate = useNavigate();
+    const serviceId = localStorage.getItem('serviceId');
 
     const handleShowMoreClick = () => {
         if (role === 'ADMIN') {
             navigate('/admin-notifications');
         } else if (role === 'SERVICE_ADMIN') {
-            navigate('/service-admin-notifications');
+            navigate('/api/serviceAdmin/notificationservice/${serviceId}');
         }
     };
 

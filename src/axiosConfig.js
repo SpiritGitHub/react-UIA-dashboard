@@ -6,7 +6,6 @@ import axios from 'axios';
 const axiosInstance = axios.create({
     baseURL: 'https://uia-api-36e17f58f26b.herokuapp.com/',
 });
-// Ajoutez un intercepteur pour inclure le token dans chaque requête sauf celles qui ne nécessitent pas d'authentification
 axiosInstance.interceptors.request.use(
     (config) => {
         const noAuthUrls = ['/api/auth/login', '/api/auth/register', '/api/auth/forgot-password', '/api/auth/refresh-token'];
@@ -23,14 +22,13 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// Intercepteur pour gérer le rafraîchissement du token
 axiosInstance.interceptors.response.use(
     (response) => {
         return response;
     },
     async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 403 && !originalRequest._retry) {
+        if (error.response && error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
                 const refreshToken = localStorage.getItem('refreshToken');

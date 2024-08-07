@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './tableList.scss';
-
-// mui table
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -21,7 +19,6 @@ function TableListUrgentistes() {
     const serviceId = localStorage.getItem('serviceId');
     const token = localStorage.getItem('token');
 
-    console.log('Service ID:', serviceId);
     if (!storedRole || !token) {
         console.error('Missing required information in local storage');
         setError('Missing required information in local storage');
@@ -32,9 +29,7 @@ function TableListUrgentistes() {
 
     const fetchUrl = storedRole === 'ADMIN' 
         ? '/api/admin/all-urgentistes' 
-        : `/api/serviceAdmin/urgentistesbyserviceId?serviceId=${serviceId}`;
-
-    console.log(`Fetching data from ${fetchUrl} with token ${token}`); // Debug
+        : `/api/serviceAdmin/urgentistesbyserviceId/${serviceId}`;
 
     axiosInstance
         .get(fetchUrl, {
@@ -43,18 +38,18 @@ function TableListUrgentistes() {
             },
         })
         .then((response) => {
-            console.log('Data fetched successfully', response.data); // Debug
             setData(response.data);
         })
         .catch((error) => {
             console.error('There was an error fetching the data!', error);
             setError('There was an error fetching the data!');
         });
-}, []);
+  }, []);
 
-if (error) {
+  if (error) {
     return <div>{error}</div>;
-}
+  }
+
   return (
     <div className="table_container">
       <h2 className="table_title">Urgentistes</h2>
@@ -69,14 +64,22 @@ if (error) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((urgentist) => (
-              <TableRow key={urgentist.id}>
-                <TableCell>{urgentist.nomComplet}</TableCell>
-                <TableCell>{urgentist.email}</TableCell>
-                <TableCell>{urgentist.tel}</TableCell>
-                {role === 'ADMIN' && <TableCell>{urgentist.nomServices}</TableCell>}
+            {data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={role === 'ADMIN' ? 4 : 3} style={{ textAlign: 'center' }}>
+                  Pas de données encore enregistrées.
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              data.map((urgentist) => (
+                <TableRow key={urgentist.id}>
+                  <TableCell>{urgentist.nomComplet}</TableCell>
+                  <TableCell>{urgentist.email}</TableCell>
+                  <TableCell>{urgentist.tel}</TableCell>
+                  {role === 'ADMIN' && <TableCell>{urgentist.nomServices}</TableCell>}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
