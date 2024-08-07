@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+/* const axiosInstance = axios.create({
     baseURL: 'http://localhost:2000',
+}); */
+const axiosInstance = axios.create({
+    baseURL: 'https://uia-api-36e17f58f26b.herokuapp.com/',
 });
-
 // Ajoutez un intercepteur pour inclure le token dans chaque requête sauf celles qui ne nécessitent pas d'authentification
 axiosInstance.interceptors.request.use(
     (config) => {
