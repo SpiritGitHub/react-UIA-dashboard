@@ -1,60 +1,66 @@
-$icon_color: #4665fdde;
-$text_color: #3d3c42;
+$icon-color: #4665fdde;
+$text-color: #3d3c42;
+$border-color: #eee;
+$hover-background: lighten($icon-color, 10%);
+$hover-color: white;
+$sidebar-width: 250px; // Largeur fixe de la sidebar pour les écrans larges
 
 .sidebar {
-  border-right: 1px solid #eee;
+  border-right: 1px solid $border-color;
   height: 100vh;
-  margin-left: 10px;
+  width: $sidebar-width;
+  background-color: #f9f9f9;
 
   .logo {
     cursor: pointer;
-    color: $icon_color;
-    padding: 19px 20px;
-    border-bottom: 1px solid #eee;
-    border-right: 1px solid #eee;
+    color: $icon-color;
+    padding: 20px;
+    border-bottom: 1px solid $border-color;
     text-align: center;
 
     .text_none {
       text-decoration: none;
-      color: $icon_color;
+      color: $icon-color;
+      font-size: 1.5rem; // Utilisation d'unités relatives pour la taille de police
     }
   }
 
   .links {
-    margin: 15px 13px;
-    // margin: 10px;
+    margin: 15px;
+
     ul {
       .spann {
         text-transform: uppercase;
         color: gray;
         margin: 10px 3px 5px;
-        font-size: 14px;
+        font-size: 0.9rem; // Taille de texte relative pour une meilleure adaptation
       }
 
       li {
         display: flex;
         align-items: center;
-        margin-left: 10px;
-        color: $text_color;
-        padding: 8px 10px;
+        color: $text-color;
+        padding: 10px;
         font-weight: 500;
         transition: all 0.2s ease;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 1rem; // Taille de texte relative
         transition: all 0.2s ease;
 
         &:hover {
-          background-color: $icon_color;
-          color: white;
+          background-color: $hover-background;
+          color: $hover-color;
         }
+
         &:hover .icon {
-          color: white;
+          color: $hover-color;
         }
+
         .icon {
-          color: $icon_color;
+          color: $icon-color;
           margin-right: 10px;
-          font-size: 18px;
+          font-size: 1.2rem; // Taille de l'icône relative
         }
       }
     }
@@ -63,6 +69,7 @@ $text_color: #3d3c42;
   .colorss {
     display: flex;
     margin: 20px 10px;
+
     .color_option {
       width: 20px;
       height: 20px;
@@ -74,9 +81,63 @@ $text_color: #3d3c42;
       &:nth-child(1) {
         background-color: whitesmoke;
       }
+
       &:nth-child(2) {
         background-color: #333;
       }
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    width: 200px; // Réduction de la largeur de la sidebar sur les écrans moyens
+
+    .logo .text_none {
+      font-size: 1.3rem; // Ajustement de la taille du texte
+    }
+
+    .links ul li {
+      font-size: 0.9rem; // Réduction de la taille du texte
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 180px; // Réduction supplémentaire pour les tablettes
+
+    .logo .text_none {
+      font-size: 1.2rem; // Ajustement de la taille du texte
+    }
+
+    .links ul li {
+      font-size: 0.8rem; // Réduction de la taille du texte
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 100px; // Sidebar plus compacte sur les petits écrans
+
+    .logo {
+      padding: 10px;
+
+      .text_none {
+        font-size: 1rem; // Taille de texte réduite pour la compacité
+      }
+    }
+
+    .links ul li {
+      flex-direction: column; // Empile les icônes et le texte verticalement
+      align-items: flex-start;
+      font-size: 0.7rem; // Taille de texte réduite
+      padding: 8px;
+
+      .icon {
+        font-size: 1rem; // Réduction de la taille de l'icône
+        margin-right: 0; // Supprimer l'espace horizontal
+        margin-bottom: 5px; // Ajout d'un espace vertical
+      }
+    }
+
+    .colorss {
+      margin: 10px 5px;
     }
   }
 }

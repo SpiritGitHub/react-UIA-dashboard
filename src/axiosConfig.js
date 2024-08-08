@@ -3,9 +3,11 @@ import axios from 'axios';
 /* const axiosInstance = axios.create({
     baseURL: 'http://localhost:2000',
 }); */
+
 const axiosInstance = axios.create({
     baseURL: 'https://uia-api-36e17f58f26b.herokuapp.com/',
 });
+
 axiosInstance.interceptors.request.use(
     (config) => {
         const noAuthUrls = ['/api/auth/login', '/api/auth/register', '/api/auth/forgot-password', '/api/auth/refresh-token'];

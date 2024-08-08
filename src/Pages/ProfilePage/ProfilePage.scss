@@ -1,42 +1,100 @@
 .profile_page {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
+    background-color: #f7f7f7;
 
     .home_sidebar {
         width: 250px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+        @media screen and (max-width: 768px) {
+            width: 200px;
+        }
+
+        @media screen and (max-width: 576px) {
+            display: none;
+        }
     }
 
     .profile_main {
         flex: 1;
         display: flex;
         flex-direction: column;
-    }
 
-    .profile_content {
-        flex: 1;
-        padding: 20px;
-        background-color: #f7f7f7;
+        .profile_content {
+            flex: 1;
+            padding: 20px;
+            background-color: #f7f7f7;
 
-        h2 {
-            margin-bottom: 20px;
-        }
+            h2 {
+                margin-bottom: 20px;
+                font-size: 1.8em;
+                color: #333;
 
-        .profile_form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-
-            .submit_btn {
-                padding: 10px;
-                background-color: #4caf50;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 4px;
-
-                &:hover {
-                    background-color: #45a049;
+                @media screen and (max-width: 768px) {
+                    font-size: 1.5em;
                 }
+
+                @media screen and (max-width: 576px) {
+                    font-size: 1.3em;
+                }
+            }
+
+            .profile_form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+                input {
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    font-size: 1em;
+
+                    @media screen and (max-width: 576px) {
+                        padding: 8px;
+                        font-size: 0.9em;
+                    }
+                }
+
+                .submit_btn {
+                    padding: 12px;
+                    background-color: #4caf50;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    font-size: 1.1em;
+                    transition: background-color 0.3s ease;
+
+                    &:hover {
+                        background-color: #45a049;
+                    }
+
+                    @media screen and (max-width: 576px) {
+                        padding: 10px;
+                        font-size: 1em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .profile_page {
+        flex-direction: column;
+
+        .profile_main {
+            .profile_content {
+                padding: 15px;
             }
         }
     }

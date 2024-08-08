@@ -1,32 +1,82 @@
-$primary-color: #5a67d8; // Une couleur principale plus douce et professionnelle
-$secondary-color: #4b505f; // Une couleur secondaire plus foncée pour le texte
-$text-color: #6b7784; // Une couleur de texte plus claire pour une meilleure lisibilité
-$background-color: #f7fafc; // Une couleur d'arrière-plan très légère pour une sensation d'espace
-$border-color: #edf2f7; // Une couleur de bordure très légère pour un aspect propre
-$success-color: #38a169; // Vert plus doux pour les messages de succès
-$font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Une police plus moderne et lisible
+// Variables
+$primary-color: #5a67d8; // Couleur principale
+$secondary-color: #4b505f; // Couleur secondaire pour le texte
+$text-color: #6b7784; // Couleur de texte claire pour la lisibilité
+$background-color: #f7fafc; // Arrière-plan léger
+$border-color: #edf2f7; // Bordure légère
+$success-color: #38a169; // Vert doux pour succès
+$error-color: #e53e3e; // Rouge pour les erreurs
+$font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Police moderne
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column($gap: 20px) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+@mixin button-style($bg-color, $text-color: #fff) {
+  padding: 12px 24px;
+  border: none;
+  background-color: $bg-color;
+  color: $text-color;
+  font-size: 17px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken($bg-color, 5%);
+  }
+}
+
+// Global Styles
+body {
+  font-family: $font-family;
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+}
 
 .add_new {
   display: grid;
   grid-template-columns: 17% 83%;
   justify-content: center;
-  font-family: $font-family;
+
+  @media screen and (max-width: 992px) {
+    grid-template-columns: 100%;
+    
+    .home_sidebar {
+      display: none;
+    }
+  }
+
+  .home_sidebar {
+    @include flex-center;
+  }
 
   .new_page {
+    padding: 15px;
+
     .new_page_main {
-      padding: 15px 25px;
-      max-width: 450px;
+      max-width: 500px;
       margin: 0 auto;
+      padding: 25px;
       background-color: $background-color;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
 
+      @include flex-column(30px);
+
       .new_page_content {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 10px;
-        border-radius: 8px;
+        @include flex-column(25px);
 
         .add_new_user {
           color: $secondary-color;
@@ -35,17 +85,23 @@ $font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Une police plus
           text-align: center;
         }
 
-        .success_message {
-          color: $success-color;
+        .success_message, .error_message {
           font-size: 18px;
           font-weight: bold;
           text-align: center;
           margin-bottom: 20px;
+
+          &.success_message {
+            color: $success-color;
+          }
+
+          &.error_message {
+            color: $error-color;
+          }
         }
 
         .image {
-          display: flex;
-          justify-content: center;
+          @include flex-center;
           margin-bottom: 20px;
 
           img {
@@ -54,37 +110,24 @@ $font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Une police plus
             background-color: $border-color;
             object-fit: cover;
             border-radius: 5%;
+            border: 1px solid $border-color;
           }
         }
 
         .form {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
+          @include flex-column;
 
           .form_inp {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            @include flex-column;
 
             label {
-              display: flex;
-              align-items: center;
-              margin-bottom: 10px;
               font-weight: bold;
               color: $secondary-color;
             }
 
-            .file_icon {
-              cursor: pointer;
-              margin-left: 10px;
-              font-size: 30px;
-              color: $primary-color;
-            }
-
-            select, input[type="text"] {
+            input[type="text"], select {
               width: 100%;
-              padding: 8px;
+              padding: 10px;
               border: 1px solid $border-color;
               border-radius: 4px;
               background-color: #fff;
@@ -94,6 +137,13 @@ $font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Une police plus
                 border-color: $primary-color;
               }
             }
+
+            .file_icon {
+              cursor: pointer;
+              margin-left: 10px;
+              font-size: 30px;
+              color: $primary-color;
+            }
           }
 
           .section {
@@ -102,13 +152,7 @@ $font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Une police plus
             h3 {
               color: $primary-color;
               font-size: 22px;
-              margin-top: 5px;
-              margin-bottom: 10px;
-            }
-
-            input {
-              margin: 5px;
-              border-radius: 4px;
+              margin: 5px 0 15px;
             }
 
             .checkbox_group {
@@ -138,34 +182,11 @@ $font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // Une police plus
           }
 
           .submit_btn {
-            display: block;
-            width: fit-content;
-            padding: 12px 24px;
+            @include button-style($primary-color);
             margin-top: 20px;
-            border: none;
-            background-color: $primary-color;
-            color: $background-color;
-            font-size: 17px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-
-            &:hover {
-              background-color: darken($primary-color, 5%);
-            }
           }
         }
       }
-    }
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .add_new {
-    grid-template-columns: 100%;
-
-    .home_sidebar {
-      display: none;
     }
   }
 }

@@ -4,9 +4,8 @@ import { ColorContext } from '../../ColorContext/darkContext';
 import Chart from '../Chart/Chart';
 import ItemLists from '../ItemLists/ItemLists';
 import Navbar from '../Navbar/Navbar';
-import ProgressBar from '../ProgressBar/ProgressBar';
 import Sidebar from '../Sidebar/Sidebar';
-import EventHistoryTable from '../EventHistoryTable/EventHistoryTable'; // Import the EventHistoryTable component
+import EventHistoryTable from '../EventHistoryTable/EventHistoryTable';
 import './Home.scss';
 
 function Home() {
@@ -112,14 +111,14 @@ function Home() {
                         </div>
                         <div className="table">
                             <div className="title">Historique des événements</div>
-                            <EventHistoryTable /> {/* Add the new component here */}
+                            <EventHistoryTable />
                         </div>
                     </>
                 )}
                 {role === 'SERVICE_ADMIN' && (
                     <div className="table">
                         <div className="title">Historique des événements</div>
-                        <EventHistoryTable /> {/* Add the new component here */}
+                        <EventHistoryTable />
                     </div>
                 )}
             </div>
